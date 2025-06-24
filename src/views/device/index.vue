@@ -7,12 +7,11 @@
 
 <script setup lang="ts">
     import { useRouter } from 'vue-router';
-    import { eraseCookie } from '@/utils/cookie';
 
     const router = useRouter();
 
     function logout() {
-        eraseCookie('token');
+        localStorage.removeItem('token');
         router.push('/login');
     }
 </script>

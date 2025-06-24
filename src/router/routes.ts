@@ -6,12 +6,18 @@ const routes = [
         path: '/login',
         name: 'Login',
         component: Login,
+        meta: {
+            layout: 'auth',
+        },
     },
     {
         path: '/',
         name: 'Dashboard',
         component: Dashboard,
-        meta: { requiresAuth: true },
+        meta: {
+            requiresAuth: true,
+            layout: 'default', // header, footer, nav
+        },
     },
 ];
 

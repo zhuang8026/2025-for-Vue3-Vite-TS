@@ -1,18 +1,18 @@
 import { createApp } from 'vue';
 
+// module
+import { createPinia } from 'pinia';
+
 // router
 import router from '@/router/index.ts';
 
-// i18n
+// plugins
 import i18n from '@/plugins/i18n';
-
-// module
-import axios from 'axios';
-import { createPinia } from 'pinia';
+import axios from '@/plugins/axios';
 
 // pages & style
 import App from './App.vue';
-import './style.css';
+import '@/assets/scss/_all.scss';
 
 createApp(App)
     .use(createPinia()) // [必須] 使用pinia
