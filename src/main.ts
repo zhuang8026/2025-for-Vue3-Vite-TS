@@ -12,7 +12,8 @@ import axios from '@/plugins/axios';
 
 // pages & style
 import App from './App.vue';
-import '@/assets/scss/_all.scss';
+import '@/assets/scss/_reset.scss';
+import '@/assets/scss/_window.scss';
 
 createApp(App)
     .use(createPinia()) // [必須] 使用pinia

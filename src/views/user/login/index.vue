@@ -51,20 +51,22 @@
         </div>
     </div>
 </template>
-
 <script setup lang="ts">
     import { reactive, ref } from 'vue';
     import { useRouter } from 'vue-router';
-
+    // utils
     import { setCookie } from '@/utils/cookie';
+    import { openLoading, closeLoading } from '@/utils/useLoading';
+    // api
+    import { login } from '@/api/apiClient';
 
     const router = useRouter();
 
     const isLogin = ref(true);
 
     const form = reactive({
-        username: '',
-        password: '',
+        username: 'billdavid50814@gmail.com',
+        password: 'Enargy17885@',
         remember: false,
     });
 
@@ -76,11 +78,20 @@
         alert('忘記密碼點擊！可跳轉到重設頁面');
     };
 
-    const handleSubmit = () => {
-        alert(`${isLogin.value ? '登入' : '註冊'}成功！`);
-        setCookie('token', 'testingtoken123');
-        router.push('/');
+    const handleSubmit = async () => {
+        openLoading();
+        const data = {
+            userId: form.username,
+            userPwd: form.password,
+        };
+        let res = await login(data);
+        if (res.code == 200) {
+            setCookie('token', res.data.token);
+            router.push('/');
+            alert(`${isLogin.value ? '登入' : '註冊'}成功！`);
+            closeLoading();
+        }
+        console.log('login:', res);
     };
 </script>
-
 <style lang="scss" scoped src="./login.scss"></style>
