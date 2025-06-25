@@ -18,7 +18,6 @@
         // 和 watch 的區別：
         // -> 組合資料 用 computed (可return
         // -> call api 用 watch (不可return
-        console.log(route.name, route.meta.layout);
         switch (route.meta.layout) {
             case 'auth':
                 return AuthLayout;

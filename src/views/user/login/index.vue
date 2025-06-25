@@ -94,4 +94,4 @@
         console.log('login:', res);
     };
 </script>
-<style lang="scss" scoped src="./login.scss"></style>
+<style scoped lang="scss" src="./login.scss"></style>
