@@ -17,7 +17,7 @@ const isLoggedIn = (): boolean => {
 //     return !!localStorage.getItem('token')
 // }
 
-// 路由守衛
+// router守衛
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !isLoggedIn()) {
         next('/login');

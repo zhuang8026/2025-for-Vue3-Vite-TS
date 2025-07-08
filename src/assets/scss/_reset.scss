@@ -150,6 +150,12 @@ sub {
 //     fill: $svg_icon;
 // }
 
+svg {
+    width: 24px;
+    height: auto;
+    fill: $black_gray_o5;
+}
+
 body {
     // font-family: 'Segoe UI', '微軟正黑體' !important;
     font-family: 'Public Sans', sans-serif !important;

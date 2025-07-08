@@ -22,7 +22,7 @@
         display: flex;
         .d-layout-main {
             width: calc(100vw - ($width * 26));
-            background-color: #212121;
+            // background-color: #212121;
         }
     }
 </style>

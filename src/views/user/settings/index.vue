@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>Device Page</h1>
+        <h1>Settings Page</h1>
     </div>
 </template>
 
@@ -9,8 +9,5 @@
 
     const router = useRouter();
 
-    function logout() {
-        localStorage.removeItem('token');
-        router.push('/login');
-    }
+    function logout() {}
 </script>

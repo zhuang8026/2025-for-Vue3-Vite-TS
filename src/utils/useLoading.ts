@@ -2,7 +2,7 @@
 import { createApp } from 'vue';
 // 匯入 Vue 裡面的 App 型別（這只是用來讓 TypeScript 檢查而已）
 import type { App } from 'vue';
-import GlobalLoading from '@/components/ui/loading.vue';
+import GlobalLoading from '@/components/ui/Loading.vue';
 
 let instance: App<Element> | null = null; // 創建 空Vue-dom
 let loadingRef: any = null; // 操作元件自身的方法
