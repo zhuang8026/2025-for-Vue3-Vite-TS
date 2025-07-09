@@ -6,14 +6,15 @@
                 <Warning class="svg_icon" />
                 提示
             </div>
+
             <div class="avatar-list">
-                <div class="avatar" @click="clickAvatar">UU</div>
+                <div class="avatar" @click="clickAvatar">{{ userInfo?.name }}</div>
 
                 <transition name="fade">
                     <div class="drop-down" v-if="showDropDown">
                         <div class="account">
                             <img src="" alt="" />
-                            jiehan.fun@gmail.com
+                            {{ userInfo?.id }}
                         </div>
                         <div class="drop-list">
                             <img src="" alt="" />
@@ -31,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-    import { reactive, ref } from 'vue';
+    import { computed, reactive, ref } from 'vue';
     import { useRouter } from 'vue-router';
 
     // api
@@ -41,12 +42,27 @@
     import { openLoading, closeLoading } from '@/utils/useLoading';
     import { eraseCookie } from '@/utils/cookie';
 
+    // pinia
+    import { useUserStore } from '@/stores/user';
+
     // svg
     import Warning from '@/assets/images/warning.svg';
 
     const router = useRouter();
-
+    const userStore = useUserStore();
     const showDropDown = ref(false);
+
+    const userInfo = computed(() => {
+        if (userStore.profile?.id) {
+            let id = userStore.profile?.id;
+            let name = id.substring(0, 2);
+            let outPut = {
+                id: id,
+                name: name.toLocaleUpperCase(),
+            };
+            return outPut;
+        }
+    });
 
     const clickAvatar = () => {
         showDropDown.value = !showDropDown.value;
@@ -57,7 +73,8 @@
         let res = await logout();
         console.log(res);
         if (res.code == 200) {
-            eraseCookie('token');
+            eraseCookie('token'); // cookies 寫法
+            userStore.logout(); // pinia 寫法
             router.push('/login');
             closeLoading();
         }
@@ -84,6 +101,7 @@
                 align-items: center;
                 justify-content: center;
 
+                font-size: $fs-14;
                 border-radius: $width;
                 background: $black_o9;
                 margin-right: 0.5rem;
@@ -136,10 +154,11 @@
                 }
             }
         }
-    }
 
-    .svg_icon {
-        font-size: $fs-12;
+        .svg_icon {
+            width: calc($width * 1.6);
+            margin-right: calc($width / 2);
+        }
     }
 
     // 動畫

@@ -3,7 +3,7 @@
         <div class="auth-card">
             <!-- <h2 class="auth-title">登入</h2> -->
 
-            <form @submit.prevent="handleSubmit">
+            <form @submit.prevent="submitLogin">
                 <div class="form-group">
                     <label for="username">帳號</label>
                     <input
@@ -34,7 +34,7 @@
                 </div>
 
                 <br />
-                <UIButton name="送出" :disabled="isdisabled" @click="handleSubmit" />
+                <UIButton name="送出" :disabled="isdisabled" @click="submitLogin" />
 
                 <div class="forget-pwd">
                     <a href="#" class="link" @click.prevent="onForgotPassword">忘記密碼？</a>
@@ -70,11 +70,15 @@
     import UIButton from '@/components/ui/Button.vue';
     import CustomPopups from '@/components/global/popups/CustomPopups.vue';
 
+    // pinia
+    import { useUserStore } from '@/stores/user';
+
     // svg
     import EyeOpen from '@/assets/images/eye-open.svg';
     import EyeHide from '@/assets/images/eye-hide.svg';
 
     const router = useRouter();
+    const userStore = useUserStore();
 
     const form = reactive({
         username: 'Asd@iii.org.tw',
@@ -121,7 +125,7 @@
     };
 
     // call api
-    const handleSubmit = async () => {
+    const submitLogin = async () => {
         openLoading();
         const data = {
             userId: form.username,
@@ -132,6 +136,12 @@
             console.log('login:', res);
             if (res.code == 200) {
                 setCookie('token', res.data.token);
+                userStore.setToken(res.data.token);
+                userStore.setProfile({
+                    id: res.data.userInfo.user_id,
+                    name: res.data.userInfo.user_name,
+                    email: res.data.userInfo.email,
+                });
                 router.push('/');
             } else {
                 popupMessage.title = '登入失敗';

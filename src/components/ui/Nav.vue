@@ -89,7 +89,7 @@
                 .icon {
                     width: 30px;
                     height: 30px;
-                    background: $white;
+                    background: $light_blue;
                     border-radius: 50%;
                 }
             }
