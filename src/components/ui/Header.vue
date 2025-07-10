@@ -2,7 +2,7 @@
     <header>
         <div class="title">用電追蹤</div>
         <div class="h-items">
-            <div class="info" @click="">
+            <div class="info" @click="showPopup">
                 <Warning class="svg_icon" />
                 提示
             </div>
@@ -43,13 +43,16 @@
     import { eraseCookie } from '@/utils/cookie';
 
     // pinia
-    import { useUserStore } from '@/stores/user';
+    import { useUserStore } from '@/stores/user'; // save user info
+    import { usePopupStore } from '@/stores/popups'; // alert
 
     // svg
     import Warning from '@/assets/images/warning.svg';
 
     const router = useRouter();
-    const userStore = useUserStore();
+    const userStore = useUserStore(); // save user info
+    const popup = usePopupStore(); // alert
+
     const showDropDown = ref(false);
 
     const userInfo = computed(() => {
@@ -68,15 +71,39 @@
         showDropDown.value = !showDropDown.value;
     };
 
+    const showPopup = () => {
+        popup.open({
+            title: '提示',
+            message: '這是一個提示',
+            buttons: [
+                { type: 'cancel', label: '取消' },
+                { type: 'confirm', label: '發送' },
+            ],
+            onConfirm: () => {
+                console.log('使用者確認');
+                // 執行刪除邏輯
+            },
+            onCancel: () => {
+                console.log('使用者取消');
+            },
+        });
+    };
+
     const apiLogout = async () => {
         openLoading();
         let res = await logout();
         console.log(res);
-        if (res.code == 200) {
+
+        const normalLogout = () => {
             eraseCookie('token'); // cookies 寫法
             userStore.logout(); // pinia 寫法
             router.push('/login');
             closeLoading();
+        };
+        if (res.code == 200) {
+            normalLogout();
+        } else if (res.code == 4002) {
+            normalLogout();
         }
     };
 </script>

@@ -24,8 +24,6 @@
     // components
     import UIButton from '@/components/ui/Button.vue';
 
-    const visible = ref(false);
-
     const props = withDefaults(
         defineProps<{
             title?: string;
@@ -53,23 +51,29 @@
         }
     );
 
+    const visible = ref(false);
+
     // const props = defineProps<{
     //     title: string;
     //     message: string;
     // }>();
 
+    const show = () => (visible.value = true);
+    const hide = () => (visible.value = false);
+
     // 提供方法讓外部可以控制
     defineExpose({
-        show: () => (visible.value = true),
-        hide: () => (visible.value = false),
+        show: show,
+        hide: hide,
     });
 
     // 提供方法讓外部可以控制
     const emit = defineEmits(['confirm', 'cancel']);
 
     const clickBtn = (type: 'confirm' | 'cancel') => {
-        visible.value = false;
-        emit(type, type);
+        hide(); // 點擊隱藏視窗
+        emit(type, type); // 第一個 type：事件名稱（要發出去的事件）
+        // 第二個 type：事件的參數值（父層會接收到的東西）
     };
 </script>
 

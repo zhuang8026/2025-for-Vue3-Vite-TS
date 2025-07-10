@@ -2,14 +2,21 @@
     <component :is="layout">
         <router-view />
     </component>
+    <AlertPopups />
+    <OutPutPopups />
 </template>
 
 <script setup lang="ts">
     import { computed } from 'vue';
     import { useRoute } from 'vue-router';
 
+    // layouts
     import DefaultLayout from '@/components/global/layouts/DefaultLayout.vue';
     import AuthLayout from '@/components/global/layouts/AuthLayout.vue';
+
+    // components
+    import AlertPopups from '@/components/global/popups/AlertPopups.vue';
+    import OutPutPopups from '@/components/global/popups/OutPutPopups.vue';
 
     const route = useRoute();
 

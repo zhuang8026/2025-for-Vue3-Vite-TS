@@ -41,18 +41,6 @@
                 </div>
             </form>
         </div>
-
-        <CustomPopups
-            ref="popupRef"
-            :title="popupMessage.title"
-            :message="popupMessage.message"
-            :buttons="[
-                // { type: 'cancel', label: 'Cancel' },
-                { type: 'confirm', label: 'Confirm' },
-            ]"
-            @confirm="onConfirm"
-            @cancel="onCancel"
-        />
     </div>
 </template>
 <script setup lang="ts">
@@ -68,10 +56,11 @@
 
     // components
     import UIButton from '@/components/ui/Button.vue';
-    import CustomPopups from '@/components/global/popups/CustomPopups.vue';
 
     // pinia
-    import { useUserStore } from '@/stores/user';
+    import { useUserStore } from '@/stores/user'; // save user info
+    import { usePopupStore } from '@/stores/popups'; // alert
+    import { useInputPopupsStore } from '@/stores/inputpopups'; // alert
 
     // svg
     import EyeOpen from '@/assets/images/eye-open.svg';
@@ -79,26 +68,26 @@
 
     const router = useRouter();
     const userStore = useUserStore();
+    const popup = usePopupStore(); // alert
+    const inputPopup = useInputPopupsStore(); // alert
 
     const form = reactive({
         username: 'Asd@iii.org.tw',
         password: 'Enargy17885@',
         remember: false,
     });
-    const popupMessage = reactive({
-        title: '',
-        message: '',
-    });
 
     const eyeStatus = ref(false);
     const showPWD = ref(false);
     const isdisabled = ref(true);
-    const popupRef = ref();
 
+    // 忘記密碼
     const onForgotPassword = () => {
-        alert('忘記密碼點擊！可跳轉到重設頁面');
+        // alert('忘記密碼點擊！可跳轉到重設頁面');
+        showForgetPopup('忘記密碼');
     };
 
+    // 帳號 驗證
     const checkAccount = (account: any) => {
         // 驗證是否為 Email 格式
         const iAccount = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(account);
@@ -106,22 +95,48 @@
         showPWD.value = iAccount;
     };
 
+    // 按鈕點擊 驗證
     const checkBtnDisabled = (form: any) => {
         // 驗證 用戶是否都有輸入帳密
         let disabled = form.username != '' && form.password != '';
         isdisabled.value = !disabled;
     };
 
+    // 顯示密碼
     const eyesToggle = () => {
         eyeStatus.value = !eyeStatus.value;
     };
 
-    const onConfirm = (e: string) => {
-        console.log(e);
+    // 視窗
+    const showPopup = (title: string, message: string) => {
+        popup.open({
+            title: title,
+            message: message,
+            buttons: [
+                // { type: 'cancel', label: '刪除' },
+                { type: 'confirm', label: '確認' },
+            ],
+            onConfirm: data => {
+                console.log('使用者確認', data);
+                // 執行刪除邏輯
+            },
+            // onCancel: () => {
+            //     console.log('使用者取消');
+            // },
+        });
     };
 
-    const onCancel = (e: string) => {
-        console.log(e);
+    // 視窗
+    const showForgetPopup = (title: string) => {
+        inputPopup.open({
+            title: title,
+            onConfirm: data => {
+                console.log('資料送出', data);
+            },
+            onCancel: data => {
+                console.log('使用者取消', data);
+            },
+        });
     };
 
     // call api
@@ -135,23 +150,23 @@
             let res = await login(data);
             console.log('login:', res);
             if (res.code == 200) {
+                // cookies 範例
                 setCookie('token', res.data.token);
+
+                // pinia 範例
                 userStore.setToken(res.data.token);
                 userStore.setProfile({
                     id: res.data.userInfo.user_id,
                     name: res.data.userInfo.user_name,
                     email: res.data.userInfo.email,
                 });
+
                 router.push('/');
             } else {
-                popupMessage.title = '登入失敗';
-                popupMessage.message = res.message;
-                popupRef.value?.show();
+                showPopup('登入失敗', res.message);
             }
         } catch (err: any) {
-            popupMessage.title = '登入失敗';
-            popupMessage.message = err.message || '未知錯誤';
-            popupRef.value?.show();
+            showPopup('登入失敗', err.message || '未知錯誤');
         }
         await closeLoading();
     };
@@ -162,7 +177,7 @@
             checkBtnDisabled(now);
         },
         {
-            deep: true,
+            deep: true, // 監聽 form 整個物件（深層的監聽）
         }
     );
 
