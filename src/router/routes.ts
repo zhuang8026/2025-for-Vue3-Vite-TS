@@ -1,6 +1,6 @@
 import Login from '@/views/user/login/index.vue';
 
-import Dashboard from '@/views/dashboard/index.vue';
+import Training from '@/views/training/index.vue';
 import Device from '@/views/device/index.vue';
 import Settings from '@/views/user/settings/index.vue';
 
@@ -15,8 +15,8 @@ const routes = [
     },
     {
         path: '/',
-        name: 'Dashboard',
-        component: Dashboard,
+        name: 'Training',
+        component: Training,
         meta: {
             requiresAuth: true,
             layout: 'default', // header, footer, nav

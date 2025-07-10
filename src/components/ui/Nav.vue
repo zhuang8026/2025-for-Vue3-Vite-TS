@@ -18,7 +18,7 @@
                 :to="`${item.path}`"
                 class="history-list"
                 active-class="active"
-                @click="clickNav(item.path)"
+                @click="clickNav(item.path, item.name)"
             >
                 {{ item.name }}
             </router-link>
@@ -37,6 +37,9 @@
     import { reactive, ref } from 'vue';
     import { useRouter } from 'vue-router';
 
+    // pinia
+    import { useHeaderStore } from '@/stores/header'; // header name
+
     // api
     // import { logout } from '@/api/apiClient';
 
@@ -48,15 +51,18 @@
     import Star from '@/assets/images/star.svg';
 
     const items = ref([
-        { name: '用電追蹤', path: '/' },
+        { name: '訓練檢測', path: '/' },
         { name: '能源報告', path: '/device' },
         { name: '管理用電', path: '/settings' },
     ]);
 
+    const header = useHeaderStore(); // header name
+
     const router = useRouter();
 
-    const clickNav = (path: string) => {
+    const clickNav = (path: string, name: string) => {
         console.log(path);
+        header.setHeader(name);
     };
 
     // const apiLogout = async () => {

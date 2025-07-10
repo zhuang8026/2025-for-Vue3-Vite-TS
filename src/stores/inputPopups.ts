@@ -14,7 +14,7 @@ interface PopupState {
     };
 }
 
-export const useInputPopupsStore = defineStore('popupss', {
+export const useInputPopupsStore = defineStore('inputPopup', {
     state: (): PopupState => ({
         visible: false,
         title: '提示',

@@ -1,6 +1,6 @@
 <template>
     <header>
-        <div class="title">用電追蹤</div>
+        <div class="title">{{ header.name }}</div>
         <div class="h-items">
             <div class="info" @click="showPopup">
                 <Warning class="svg_icon" />
@@ -44,14 +44,15 @@
 
     // pinia
     import { useUserStore } from '@/stores/user'; // save user info
-    import { usePopupStore } from '@/stores/popups'; // alert
-
+    import { usePopupStore } from '@/stores/popups'; // show alert
+    import { useHeaderStore } from '@/stores/header'; // header name
     // svg
     import Warning from '@/assets/images/warning.svg';
 
     const router = useRouter();
     const userStore = useUserStore(); // save user info
     const popup = usePopupStore(); // alert
+    const header = useHeaderStore(); // header name
 
     const showDropDown = ref(false);
 
@@ -102,7 +103,7 @@
         };
         if (res.code == 200) {
             normalLogout();
-        } else if (res.code == 4002) {
+        } else if (res.code == 4002 || res.code == 4011) {
             normalLogout();
         }
     };

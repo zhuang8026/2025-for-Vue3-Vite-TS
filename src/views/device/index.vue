@@ -1,6 +1,14 @@
 <template>
-    <div>
-        <h1>Device Page</h1>
+    <div class="dashboard">
+        <div class="power-tracking">
+            <div class="tracking-title">
+                <h2>用電追蹤</h2>
+            </div>
+            <div class="tracking-content">
+                <div class="setting"></div>
+                <div class="use-energy"></div>
+            </div>
+        </div>
     </div>
 </template>
 
