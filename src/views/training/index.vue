@@ -1,5 +1,9 @@
 <template>
     <!-- training -->
+    <div class="train_btn">
+        <UIButton name="關閉" @click="showVideo('cancel')" />
+        <UIButton name="啟動" @click="showVideo('confirm')" />
+    </div>
     <div class="pose-container">
         <video ref="video" class="video" autoplay playsinline muted></video>
         <canvas ref="canvas" class="canvas" />
@@ -8,6 +12,11 @@
 
 <script setup lang="ts">
     import { ref, onMounted, onBeforeUnmount, onUnmounted } from 'vue';
+
+    // components
+    import UIButton from '@/components/ui/Button.vue';
+
+    // tensorflow
     import * as tf from '@tensorflow/tfjs';
     import * as poseDetection from '@tensorflow-models/pose-detection';
     import '@tensorflow/tfjs-backend-webgl';
@@ -22,6 +31,27 @@
     // 初始化攝影機 & 模型
     onMounted(async () => {
         console.log('元件初始化完成後 渲染');
+    });
+
+    onBeforeUnmount(() => {
+        console.log('元件被移除之前 銷毀');
+        cancelAnimationFrame(animationFrameId);
+    });
+
+    onUnmounted(() => {
+        console.log('元件被移除之後 銷毀');
+    });
+
+    async function showVideo(type: string) {
+        if (type == 'confirm') {
+            await openVideo(); // 開啟相機
+            await detectLoop(); // 開始監控
+        } else {
+            closeVideo();
+        }
+    }
+
+    async function openVideo() {
         await tf.setBackend('webgl');
         await tf.ready();
 
@@ -46,18 +76,28 @@
 
         // 初始化 MoveNet 模型
         detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet);
+    }
 
-        detectLoop(); // 開始監控
-    });
-
-    onBeforeUnmount(() => {
-        console.log('元件被移除之前 銷毀');
+    function closeVideo() {
+        // 1. 停止 requestAnimationFrame
         cancelAnimationFrame(animationFrameId);
-    });
 
-    onUnmounted(() => {
-        console.log('元件被移除之後 銷毀');
-    });
+        // 2. 停止攝影機串流
+        const stream = video.value?.srcObject as MediaStream;
+        stream?.getTracks().forEach(track => track.stop());
+
+        // 3. 清除 video 和 canvas
+        if (video.value) {
+            video.value.srcObject = null;
+        }
+
+        const ctx = canvas.value?.getContext('2d');
+        if (ctx && canvas.value) {
+            ctx.clearRect(0, 0, canvas.value.width, canvas.value.height);
+        }
+
+        console.log('已取消監控並關閉相機');
+    }
 
     // 持續偵測
     async function detectLoop() {
@@ -155,6 +195,14 @@
         height: 480px;
     }
 
+    .train_btn {
+        width: 20rem;
+        display: grid;
+        gap: 1rem;
+        grid-gap: 1rem;
+        grid-template-columns: repeat(2, 1fr);
+        margin: 1rem;
+    }
     .video {
         position: absolute;
         z-index: 1;

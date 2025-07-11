@@ -52,7 +52,7 @@
 
     const items = ref([
         { name: '訓練檢測', path: '/' },
-        { name: '能源報告', path: '/device' },
+        { name: '用電追蹤', path: '/device' },
         { name: '管理用電', path: '/settings' },
     ]);
 

@@ -60,7 +60,7 @@
     // pinia
     import { useUserStore } from '@/stores/user'; // save user info
     import { usePopupStore } from '@/stores/popups'; // alert
-    import { useInputPopupsStore } from '@/stores/inputpopups'; // alert
+    import { useInputPopupsStore } from '@/stores/inputPopups'; // alert
 
     // svg
     import EyeOpen from '@/assets/images/eye-open.svg';
