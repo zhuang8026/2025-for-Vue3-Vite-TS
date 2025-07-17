@@ -1,7 +1,7 @@
 import Login from '@/views/user/login/index.vue';
 
 import Training from '@/views/training/index.vue';
-import Device from '@/views/device/index.vue';
+import Tracking from '@/views/tracking/index.vue';
 import Settings from '@/views/user/settings/index.vue';
 
 const routes = [
@@ -14,7 +14,7 @@ const routes = [
         },
     },
     {
-        path: '/',
+        path: '/training',
         name: 'Training',
         component: Training,
         meta: {
@@ -23,9 +23,9 @@ const routes = [
         },
     },
     {
-        path: '/device',
-        name: 'Device',
-        component: Device,
+        path: '/tracking',
+        name: 'Tracking',
+        component: Tracking,
         meta: {
             requiresAuth: true,
             layout: 'default', // header, footer, nav

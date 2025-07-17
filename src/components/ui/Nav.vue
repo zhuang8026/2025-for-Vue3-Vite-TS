@@ -51,9 +51,9 @@
     import Star from '@/assets/images/star.svg';
 
     const items = ref([
-        { name: '訓練檢測', path: '/' },
-        { name: '用電追蹤', path: '/device' },
+        { name: '用電追蹤', path: '/tracking' },
         { name: '管理用電', path: '/settings' },
+        { name: '訓練檢測', path: '/training' },
     ]);
 
     const header = useHeaderStore(); // header name

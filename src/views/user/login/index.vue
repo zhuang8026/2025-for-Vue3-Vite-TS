@@ -161,7 +161,7 @@
                     email: res.data.userInfo.email,
                 });
 
-                router.push('/');
+                router.push('/tracking');
             } else {
                 showPopup('登入失敗', res.message);
             }
