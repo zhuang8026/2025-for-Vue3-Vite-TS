@@ -1,0 +1,75 @@
+{
+    "code": 200,
+    "message": "\u64cd\u4f5c\u6210\u529f (Operation successfully.)",
+    "data": {
+        "scheduleDevices": [
+            {
+                "devId": "RS02000D6F0005FE6290",
+                "devName": "洗衣機",
+                "devType": "no dev_ext_type",
+                "activePower": null,
+                "applianceType": null,
+                "connectionStatus": "0",
+                "powerStatus": null,
+                "schedulesCount": null,
+                "scheduleInfoList": null
+            },
+            {
+                "devId": "PH09000D6F000BD0B818",
+                "devName": "電視",
+                "activePower": null,
+                "applianceType": null,
+                "connectionStatus": "0",
+                "powerStatus": null,
+                "schedulesCount": null,
+                "scheduleInfoList": null
+            },
+            {
+                "devId": "II09000D6F0005FE5E31",
+                "devName": "客廳冷氣",
+                "activePower": null,
+                "applianceType": "2006",
+                "connectionStatus": "0",
+                "powerStatus": null,
+                "schedulesCount": null,
+                "scheduleInfoList": null
+            },
+            {
+                "devId": "IN10----D48AFCD375AC",
+                "devName": "除濕機",
+                "activePower": "1.7",
+                "applianceType": "5001",
+                "connectionStatus": "1",
+                "powerStatus": "1",
+                "schedulesCount": 1,
+                "scheduleInfoList": null
+            },
+            {
+                "devId": "IN10----24DCC3409FD4",
+                "devName": "電鍋",
+                "activePower": "0.0",
+                "applianceType": "5001",
+                "connectionStatus": "1",
+                "powerStatus": "1",
+                "schedulesCount": null,
+                "scheduleInfoList": null
+            },
+            {
+                "devId": "IN10----D48AFCD9CE70",
+                "devName": "電視",
+                "activePower": "0.0",
+                "applianceType": "5001",
+                "connectionStatus": "1",
+                "powerStatus": "1",
+                "schedulesCount": null,
+                "scheduleInfoList": null
+            }
+        ],
+        "userId": "yunchung2018@hotmail.com",
+        "groupId": null,
+        "apSystem": "",
+        "limit": 50,
+        "currentPage": 1,
+        "totalPage": 1
+    }
+}

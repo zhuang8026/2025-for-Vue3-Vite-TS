@@ -1,5 +1,27 @@
 {
-    "id": 10,
-    "token": "XIOJSDOJDOFSFJDOSJFSO",
-    "isFirstLogin": true
+    "code": 200,
+    "message": "操作成功 (Operation successfully.)",
+    "data": {
+        "pswCheck": true,
+        "pwdCheck": true,
+        "token": "CuykyzNBZraRsmNQltrDqcWZDUXh8lnx1FeUsfpra7XI8Q41KnyHt1cZYdTl0M0MHiZXOpcsjoDhR3wytYD1eXECWXmKxqo3k4MkG2sMhmgfn760eZZw75lIxzbAlfUEpswvpAqq7gYpREdXf5g1kMyXJsLb4kaYlISfsgaUEeMRE91viqQsXWns6FdehYZZx6CrP6gIPhYoKUn896FTzu2QqYCcXmhSghaRpcRmsOYWNG3W3zOhuBthYS1j93EKUIMka4CY1UHgXiIka0IZ7SbC8mXm4SHtaZ3RvIqmMQe8IMRLbGMy39p1WpAqPa8qV8UUpV0crfTe55loyVIoh1O8t3fPkKdKxqOisycvhQEwagEVhV5jE9bfFuOxlO0TVYP2lVmvA8Q0UjS49Q2GMFDadG3",
+        "personInfo": true,
+        "doSurvey": false,
+        "phones": "0933333333 ",
+        "userInfo": {
+            "user_id": "Asd@iii.org.tw",
+            "user_name": "王苡傑",
+            "principal": "",
+            "group_id": "",
+            "email": "jasonwang@iii.org.tw",
+            "apsystem": "",
+            "enable_status": "",
+            "create_time": "",
+            "update_time": "",
+            "pipn_edition": "",
+            "locale_code": "zh-TW"
+        },
+        "redirectUrl": "",
+        "identity": 4
+    }
 }

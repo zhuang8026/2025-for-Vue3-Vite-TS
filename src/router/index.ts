@@ -20,10 +20,11 @@ const isLoggedIn = (): boolean => {
 // router守衛
 router.beforeEach((to, from, next) => {
     if (to.meta.requiresAuth && !isLoggedIn()) {
-        next('/login');
+        // next('/login');
     } else {
-        next();
+        // next();
     }
+    next();
 });
 
 export default router;

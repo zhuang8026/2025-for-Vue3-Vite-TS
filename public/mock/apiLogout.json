@@ -1,3 +1,5 @@
 {
-    "message": "登出成功"
+    "code": 200,
+    "message": "操作成功 (Operation successfully.)",
+    "data": true
 }

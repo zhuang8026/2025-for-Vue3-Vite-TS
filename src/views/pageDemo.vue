@@ -1,6 +1,10 @@
 <template>
     <div>
-        <UiDemo @childEvent="demoClick" :doSomething="handleChildCall" />
+        <UiDemo
+        @childEvent="demoClick" 
+        message="testing
+        " 
+        :doSomething="handleChildCall" />
     </div>
 </template>
 

@@ -1,0 +1,14 @@
+{
+    "code": 200,
+    "message": "操作成功 (Operation successfully.)",
+    "data": {
+        "err": {
+            "code": "0",
+            "msg": "Operation Successfully Completed"
+        },
+        "status": "ok",
+        "dev_id": "IN10----D48AFCD375AC",
+        "value": 0,
+        "result": "0"
+    }
+}

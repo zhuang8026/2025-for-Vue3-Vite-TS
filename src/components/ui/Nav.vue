@@ -51,9 +51,10 @@
     import Star from '@/assets/images/star.svg';
 
     const items = ref([
+        { name: '管理用電', path: '/' },
         { name: '用電追蹤', path: '/tracking' },
-        { name: '管理用電', path: '/settings' },
-        { name: '訓練檢測', path: '/training' },
+        { name: '訓練檢測', path: '/training' }, 
+        { name: '視差滾動', path: '/parallaxAnimated' }, 
     ]);
 
     const header = useHeaderStore(); // header name

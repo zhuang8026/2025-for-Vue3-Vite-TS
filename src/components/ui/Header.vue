@@ -99,13 +99,16 @@
             eraseCookie('token'); // cookies 寫法
             userStore.logout(); // pinia 寫法
             router.push('/login');
-            closeLoading();
         };
         if (res.code == 200) {
             normalLogout();
         } else if (res.code == 4002 || res.code == 4011) {
             normalLogout();
         }
+
+        setTimeout(() => {
+            closeLoading();
+        }, 1000);
     };
 </script>
 

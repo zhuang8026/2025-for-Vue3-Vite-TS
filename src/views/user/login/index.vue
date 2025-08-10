@@ -161,14 +161,16 @@
                     email: res.data.userInfo.email,
                 });
 
-                router.push('/tracking');
+                router.push('/');
             } else {
                 showPopup('登入失敗', res.message);
             }
         } catch (err: any) {
             showPopup('登入失敗', err.message || '未知錯誤');
         }
-        await closeLoading();
+        setTimeout(() => {
+            closeLoading();
+        }, 1000);
     };
 
     watch(

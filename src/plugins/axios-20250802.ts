@@ -2,16 +2,11 @@ import type { App } from 'vue';
 import axios from 'axios';
 import type { Method } from 'axios';
 
-// enum 映射
-import { ENV } from '@/assets/enum/enum';
-
 // utils
 import { getCookie } from '@/utils/cookie';
 
-// API初始化設定
-const apiENV = import.meta.env.VITE_ENV; //現在環境
 const JAVA_SERVER = import.meta.env.VITE_API_JAVA_URL || '';
-// const PYTHON_SERVER = import.meta.env.VITE_API_PYTHON_URL || '';
+const PYTHON_SERVER = import.meta.env.VITE_API_PYTHON_URL || '';
 
 const api = async (
     method: Method,
@@ -21,11 +16,8 @@ const api = async (
     auth: boolean = true, // 可選：是否帶 token
     py_server: boolean = false
 ): Promise<any> => {
-    let headers: Record<string, string> = {};
-    let hostURL: string = '';
-    let hostName: string = `${window.location.origin}/`;
+    const headers: Record<string, string> = {};
 
-    console.log(`hostName: ${hostName}`);
     // 設定 Content-Type
     headers['Content-Type'] = type === 'form' ? 'multipart/form-data' : 'application/json';
 
@@ -37,18 +29,10 @@ const api = async (
         }
     }
 
-    switch (apiENV) {
-        case ENV.MOCK:
-            hostURL = `./mock/`;
-            break;
-        default:
-            hostURL = JAVA_SERVER;
-    }
-
     try {
         const response = await axios({
             method,
-            url: hostURL + url,
+            url: py_server ? PYTHON_SERVER : JAVA_SERVER + url,
             headers,
             data: data,
         });
