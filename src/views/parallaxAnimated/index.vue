@@ -1,206 +1,218 @@
 <template>
-    <div class="h-60"></div>
-    <div class="box" ref="boxRef">
-        <div class="container">
-            <div
-                class="scroll-area"
-                ref="scrollArea"
-                @scroll="onScroll"
-                @mouseenter="focusScrollArea"
-            >
-                <div class="content">
-                    <!-- 左側文字 -->
-                    <div class="text-column">
-                        <h1>我是TITLE</h1>
-                        <div
-                            v-for="(text, index) in texts"
-                            :key="index"
-                            :ref="el => (textRefs[index] = el)"
-                            class="text-block"
-                            :class="{ active: index === activeIndex }"
-                            @click="isclick(index)"
-                        >
-                            {{ text }}
-                        </div>
-                    </div>
-
-                    <!-- 右側色塊 -->
-                    <div class="color-column">
-                        <div
-                            class="color-block"
-                            :style="{ backgroundColor: colors[activeIndex] }"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="h-100"></div>
+    <main>
+        <div style="height: 50vh" />
+        <section class="fluid">
+            <ul aria-hidden="true" :style="{ '--count': items.length }">
+                <li v-for="(text, i) in items" :key="i" :style="{ '--i': i }">
+                    {{ text }}
+                </li>
+            </ul>
+            <h2 style="color: red; top: 80px;">
+                <span aria-hidden="true">you can&nbsp;</span>
+            </h2>
+        </section>
+        <section>
+            <h2 style="color: red">fin.</h2>
+        </section>
+        <div style="height: 50vh" />
+    </main>
 </template>
 
-<script setup>
-    import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
+<script setup lang="ts">
+    import { onMounted, ref } from 'vue';
 
-    const boxRef = ref(null);
+    interface Config {
+        theme: 'dark' | 'light' | 'system';
+        animate: boolean;
+        snap: boolean;
+        start: number;
+        end: number;
+        debug: boolean;
+    }
 
-    const texts = [
-        '第一段文字，高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短高度比較短',
-        '第二段文字，稍微長一點點內容內容內容',
-        '第三段文字，中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子中等長度的句子',
-        '第四段文字，這是一個比較長的段落文字段落文字段落文字段落',
-        '第五段文字，很短',
-    ];
+    const items = ref([
+        'design.design.design.design.',
+        'prototype.',
+        'solve.',
+        'build.',
+        'develop.',
+        'debug.',
+        'Google offers a free service that lets you instantly translate text, phrases, and web pages between English and over 100 other languages.',
+        'cook.',
+        'ship.',
+        'prompt.prompt.prompt.',
+        'collaborate.',
+        'create.',
+        'inspire.',
+        'follow.',
+        'This free service from Google instantly translates words, phrases, and web pages between Simplified Chinese and over 100 other languages',
+        'test.',
+        'optimize.',
+        'teach.',
+        'visualize.',
+        'transform.',
+        'scale.',
+        'do it.',
+    ]);
 
-    const colors = ['red', 'orange', 'yellow', 'green', 'blue'];
+    const config = ref<Config>({
+        theme: 'dark',
+        animate: true,
+        snap: true,
+        start: Math.floor(Math.random() * 100),
+        end: Math.floor(Math.random() * 100) + 900,
+        debug: false,
+    });
 
-    const activeIndex = ref(0);
-    const textRefs = [];
-    const scrollArea = ref(null);
+    let itemsEls: HTMLElement[] = [];
 
-    const hasScrollTop = ref(false);
+    // 計算滾動進度（0~1）
+    function getScrollProgress(startEl: HTMLElement, endEl: HTMLElement) {
+        const offset = 80; // 基準點距離視窗頂部 80px
 
-    const isclick = num => {
-        activeIndex.value = num;
-        // 點擊時自動滾動到對應文字
-        const target = textRefs[num];
-        if (target && scrollArea.value) {
-            scrollArea.value.scrollTo({
-                top: target.offsetTop,
-                behavior: 'smooth',
-            });
-        }
-    };
+        const start = startEl.getBoundingClientRect().top + window.scrollY - offset;
+        const end = endEl.getBoundingClientRect().top + window.scrollY - offset;
+        const current = window.scrollY;
+        return Math.min(Math.max((current - start) / (end - start), 0), 1);
+    }
 
-    const onScroll = () => {
-        if (!scrollArea.value) return;
-        const el = scrollArea.value;
-        const scrollTop = el.scrollTop;
-        const scrollHeight = el.scrollHeight;
-        const clientHeight = el.clientHeight;
+    function updateScrollAnimation() {
+        if (!config.value.animate) return;
 
-        // 1️⃣ 判斷哪個 index 最接近頂部
-        let closestIndex = 0;
-        let minDistance = Infinity;
+        const root = document.documentElement;
+        const progress = getScrollProgress(itemsEls[0], itemsEls[itemsEls.length - 1]);
 
-        textRefs.forEach((el, idx) => {
-            if (!el) return;
-            const distance = Math.abs(el.offsetTop - scrollTop);
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestIndex = idx;
-            }
+        // 色相變化
+        const hue = config.value.start + (config.value.end - config.value.start) * progress;
+        root.style.setProperty('--hue', hue.toString());
+
+        // 控制每個 li 的透明度
+        itemsEls.forEach((el, i) => {
+            const itemProgress = progress * (itemsEls.length - 1) - i;
+            const opacity = Math.max(0.2, 1 - Math.abs(itemProgress));
+            el.style.opacity = opacity.toString();
         });
 
-        activeIndex.value = closestIndex;
+        requestAnimationFrame(updateScrollAnimation);
+    }
 
-        // 2️⃣ 判斷是否滑到底部
-        if (scrollTop + clientHeight >= scrollHeight - 1) {
-            console.log('📌 scroll-area 已經滑到底部');
-            // hasScrollTop.value = false;
-        }
-    };
-
-    const focusScrollArea = () => {
-        console.log('focusScrollArea');
-        // if (scrollArea.value) {
-        scrollArea.value.focus();
-        // }
-    };
-
-    // const handleWindowScroll = () => {
-    //     if (!boxRef.value) return;
-
-    //     const rect = boxRef.value.getBoundingClientRect();
-    //     if (rect.top <= 0) {
-    //         console.log('🎯 box 已經到達瀏覽器最頂部');
-    //         // hasScrollTop.value = true;
-    //     }
-    // };
-
-    // onMounted(() => {
-    //     window.addEventListener('scroll', handleWindowScroll, { passive: true });
-    // });
-
-    // onBeforeUnmount(() => {
-    //     window.removeEventListener('scroll', handleWindowScroll);
-    // });
+    function updateThemeAndSettings() {
+        const root = document.documentElement;
+        root.dataset.theme = config.value.theme;
+        root.dataset.animate = String(config.value.animate);
+        root.dataset.snap = String(config.value.snap);
+        root.dataset.debug = String(config.value.debug);
+        root.style.setProperty('--start', String(config.value.start));
+        root.style.setProperty('--hue', String(config.value.start));
+        root.style.setProperty('--end', String(config.value.end));
+    }
 
     onMounted(() => {
-        nextTick(() => {
-            onScroll(); // 初始化時更新一次
-        });
+        itemsEls = Array.from(document.querySelectorAll<HTMLElement>('ul li'));
+        updateThemeAndSettings();
+        requestAnimationFrame(updateScrollAnimation);
     });
 </script>
 
-<style lang="scss" scoped>
-    h1 {
-        font-size: 50px;
-    }
-    .h-40 {
-        height: 40vh;
-    }
-    .h-60 {
-        height: 60vh;
-    }
-    .h-100 {
-        height: 100vh;
-    }
-    .has-sticky {
-        position: sticky;
-        top: 0;
-    }
-    .box {
-        width: 100%;
-        overflow: hidden;
-    }
-    .container {
-        position: relative;
+<style lang="scss">
+    @layer stick {
+        section:first-of-type {
+            --font-level: 6;
+            display: flex;
+            line-height: 1.25;
+            width: 100%;
+            padding-left: 5rem;
+        }
+        section:last-of-type {
+            min-height: 100vh;
+            display: flex;
+            place-items: center;
+            width: 100%;
+            justify-content: center;
 
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 50vh; // 固定高度
-        border: 1px solid #ccc;
-    }
+            h2 {
+                --font-level: 6;
+            }
+        }
+        section:first-of-type h2 {
+            position: sticky;
+            top: 0;
+            font-size: inherit;
+            margin: 0;
+            display: inline-block;
+            height: fit-content;
+            font-weight: 600;
+        }
+        ul {
+            width: 300px;
+            font-weight: 600;
+            padding-inline: 0;
+            margin: 0;
+            list-style-type: none;
+        }
 
-    .scroll-area {
-        flex: 1;
-        overflow-y: auto; // 到達頂部再加入
-    }
+        [data-snap='true'] {
+            scroll-snap-type: y proximity;
 
-    .content {
-        display: flex;
-    }
-
-    .text-column {
-        width: 40%;
-        height: 110vh;
-        padding: 10px;
-    }
-
-    .text-block {
-        margin-bottom: 20px;
-        padding: 10px;
-        background: #f0f0f0;
-        transition: color 0.3s;
-        color: gray;
-        cursor: pointer;
-
-        &.active {
-            color: red;
-            font-weight: bold;
+            li {
+                scroll-snap-align: center;
+            }
         }
     }
 
-    .color-column {
-        width: 60%;
-        display: flex;
-        flex-direction: column;
-    }
+    @layer base {
+        :root {
+            --font-size-min: 14;
+            --font-size-max: 20;
+            --font-ratio-min: 1.1;
+            --font-ratio-max: 1.33;
+            --font-width-min: 375;
+            --font-width-max: 1500;
+        }
 
-    .color-block {
-        width: 100%;
-        height: 100%;
-        transition: background-color 0.5s ease-in-out; // 顏色平滑漸變
+        html {
+            color-scheme: light dark;
+        }
+
+        [data-theme='light'] {
+            color-scheme: light only;
+        }
+
+        [data-theme='dark'] {
+            color-scheme: dark only;
+        }
+
+        :where(.fluid) {
+            --fluid-min: calc(
+                var(--font-size-min) * pow(var(--font-ratio-min), var(--font-level, 0))
+            );
+            --fluid-max: calc(
+                var(--font-size-max) * pow(var(--font-ratio-max), var(--font-level, 0))
+            );
+            --fluid-preferred: calc(
+                (var(--fluid-max) - var(--fluid-min)) /
+                    (var(--font-width-max) - var(--font-width-min))
+            );
+            --fluid-type: clamp(
+                (var(--fluid-min) / 16) * 1rem,
+                ((var(--fluid-min) / 16) * 1rem) -
+                    (((var(--fluid-preferred) * var(--font-width-min)) / 16) * 1rem) +
+                    (var(--fluid-preferred) * var(--variable-unit, 100vi)),
+                (var(--fluid-max) / 16) * 1rem
+            );
+            font-size: var(--fluid-type);
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
     }
 </style>
